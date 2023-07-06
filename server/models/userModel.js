@@ -28,23 +28,6 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Please provide a password"],
       select: false,
     },
-    role: {
-      type: String,
-      default: "user",
-      enum: ["user", "admin"],
-    },
-    readList: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "Story",
-      },
-    ],
-    readListLength: {
-      type: Number,
-      default: 0,
-    },
-    resetPasswordToken: String,
-    resetPasswordExpire: Date,
   },
   { timestamps: true }
 );
