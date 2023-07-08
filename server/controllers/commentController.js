@@ -1,4 +1,4 @@
-const Comment = require("../models/comment");
+const Comment = require("../models/Comments.js");
 
 // @desc    Get all comments
 // @route   GET /api/comments
@@ -20,7 +20,9 @@ exports.getComment = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.id);
     if (!comment) {
-      return res.status(404).json({ success: false, error: "Comment not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Comment not found" });
     }
     res.status(200).json({ success: true, data: comment });
   } catch (err) {
@@ -52,7 +54,9 @@ exports.updateComment = async (req, res, next) => {
       runValidators: true,
     });
     if (!comment) {
-      return res.status(404).json({ success: false, error: "Comment not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Comment not found" });
     }
     res.status(200).json({ success: true, data: comment });
   } catch (err) {
@@ -68,7 +72,9 @@ exports.deleteComment = async (req, res, next) => {
   try {
     const comment = await Comment.findByIdAndDelete(req.params.id);
     if (!comment) {
-      return res.status(404).json({ success: false, error: "Comment not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Comment not found" });
     }
     res.status(200).json({ success: true, data: {} });
   } catch (err) {

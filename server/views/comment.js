@@ -5,14 +5,14 @@ const {
   createComment,
   updateComment,
   deleteComment,
-} = require("../controllers/commentController");
+} = require("../controllers/commentController.js");
 
 const router = express.Router();
 
-router.get("/api/comments", getComments);
-router.get("/api/comments/:id", getComment);
-router.post("/api/comments", createComment);
-router.put("/api/comments/:id", updateComment);
-router.delete("/api/comments/:id", deleteComment);
+router.get("/", getComments);
+router.get("/:id", getComment);
+router.post("/", createComment);
+router.put("/:id", updateComment);
+router.delete("/:id", deleteComment);
 
 module.exports = router;

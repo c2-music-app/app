@@ -5,14 +5,14 @@ const {
   createUser,
   updateUser,
   deleteUser,
-} = require("../controllers/userController");
+} = require("../controllers/userController.js");
 
 const router = express.Router();
 
-router.get("/api/users", getUsers);
-router.get("/api/users/:id", getUser);
-router.post("/api/users", createUser);
-router.put("/api/users/:id", updateUser);
-router.delete("/api/users/:id", deleteUser);
+router.get("/", getUsers);
+router.get("/:id", getUser);
+router.post("/", createUser);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
 
 module.exports = router;

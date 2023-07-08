@@ -5,14 +5,14 @@ const {
   createPost,
   updatePost,
   deletePost,
-} = require("../controllers/postController");
+} = require("../controllers/postController.js");
 
 const router = express.Router();
 
-router.get("/api/posts", getPosts);
-router.get("/api/posts/:id", getPost);
-router.post("/api/posts", createPost);
-router.put("/api/posts/:id", updatePost);
-router.delete("/api/posts/:id", deletePost);
+router.get("/", getPosts);
+router.get("/:id", getPost);
+router.post("/", createPost);
+router.put("/:id", updatePost);
+router.delete("/:id", deletePost);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const Post = require("../models/post");
+const Post = require("../models/Posts.js");
 
 // @desc    Get all posts
 // @route   GET /api/posts
