@@ -1,4 +1,5 @@
 const Post = require("../models/Posts.js");
+const User = require("../models/Users.js");
 
 // @desc    Get all posts
 // @route   GET /api/posts
@@ -34,7 +35,15 @@ exports.getPost = async (req, res, next) => {
 // @access  Public
 exports.createPost = async (req, res, next) => {
   try {
-    const post = await Post.create(req.body);
+    // Include the user object from the request
+
+    // Add the user ID to the post data
+    const postData = {
+      ...req.body,
+      user: await User.findById(req.body.author),
+    };
+
+    const post = await Post.create(postData);
     res.status(201).json({ success: true, data: post });
   } catch (err) {
     console.error(err);

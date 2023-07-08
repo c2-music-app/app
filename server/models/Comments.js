@@ -20,6 +20,9 @@ const CommentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    user: {
+      type: {},
+    },
   },
   { timestamps: true }
 );
