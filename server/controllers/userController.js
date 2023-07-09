@@ -32,7 +32,7 @@ const login = async (req, res) => {
             },
             process.env.ACCESS_TOKEN_SECRET
           );
-          res.json(accessToken)
+          res.json({...user ,token:accessToken})
       } catch (error) {
        console.log(error.message);
       }
@@ -77,9 +77,17 @@ const signup = async (req, res) => {
       errorHandler(error, req, res);
     }
   };
+   
+  const oneUser = async (req, res) => {
+    const email = req.user.email;
+    const user = await User.find({ email: email});
+    res.json(user);
+};
 
+  
 
 module.exports = {
     login,
-    signup
+    signup,
+    oneUser
 };

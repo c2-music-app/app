@@ -28,10 +28,20 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Please provide a password"],
       select: false,
     },
-    token:{
-      type : String,
-  }
+    token: {
+      type: String,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+    },
+
+    plays: {
+      type:Number,
+      default:5,
+    },
   },
+
   { timestamps: true }
 );
 

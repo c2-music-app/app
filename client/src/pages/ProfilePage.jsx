@@ -1,6 +1,41 @@
 import React from 'react'
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function ProfilePage() {
+
+    const [User, setUser] = useState({});
+    const [isloading, setLoading] = useState(true);
+     
+    useEffect (() =>{ 
+    const getUser = async () => {
+        const token = localStorage.getItem("token") || "";
+      
+    
+        try {
+          const response = await axios.get("http://localhost:5000/user", {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+            
+          });
+       
+       
+        console.log(response.data);
+          setUser(response.data);
+          setLoading(false);
+        } catch (error) {
+          console.error(error);
+        }
+        
+      };
+      getUser();
+    }, []);
+
+   console.log(User);
+
+
+
   return (
    <>
     <>
@@ -47,8 +82,11 @@ export default function ProfilePage() {
         </svg>
       </div>
     </section>
+    
     <section className="relative py-16 bg-blueGray-200">
       <div className="container mx-auto px-4">
+        {isloading &&<div>Loading...</div> }
+      {User && !isloading &&
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
           <div className="px-6">
             <div className="flex flex-wrap justify-center">
@@ -72,14 +110,15 @@ export default function ProfilePage() {
             </div>
             <div className="text-center mt-12">
               <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                Name
+               {User[0].username}
               </h3>
               <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
               <i className="fas fa-envelope mr-2 text-lg text-blueGray-400" />
-                Email
+                {User[0].email}
               </div>
            
             </div>
+    
             <br>
             </br>
             <br>
@@ -111,6 +150,8 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
+         
+}
       </div>
     
     </section>
