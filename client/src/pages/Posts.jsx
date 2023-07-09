@@ -29,12 +29,15 @@ function Home() {
   }, []);
 
   const posts = useSelector((state) => state.posts.posts);
+  const user = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
+    console.log(user.user);
+
     if (formData.title && formData.description && formData.image) {
       dispatch(
         addPost(
-          "64a77c2d089d286adcd2b9c5",
+          user.user._id,
           formData.title,
           formData.description,
           formData.image
@@ -124,7 +127,7 @@ function Home() {
           <Button
             color="cyan"
             radius="md"
-            className="bg-sky-600"
+            className="bg-purple-600"
             onClick={handleSubmit}
           >
             Submit
@@ -132,9 +135,16 @@ function Home() {
         </form>
       </Modal>
       <div className="w-full justify-self-end self-end flex  justify-end">
-        <Button color="cyan" radius="md" className="bg-sky-600" onClick={open}>
-          Add a Post
-        </Button>
+        {user.user && (
+          <Button
+            color="cyan"
+            radius="md"
+            className="bg-purple-700"
+            onClick={open}
+          >
+            Add a Post
+          </Button>
+        )}
       </div>
       <div className=" grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 mx-auto gap-x-4 gap-y-4">
         {posts &&
@@ -163,7 +173,7 @@ function Home() {
                 <Link to={`/posts/${post.title}`}>
                   <Button
                     variant="light"
-                    color="blue"
+                    color="violet"
                     fullWidth
                     mt="md"
                     radius="md"

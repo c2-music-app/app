@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-const MusicPlayer = ({ tracks ,gate}) => {
+const MusicPlayer = ({ tracks, gate }) => {
   const [playing, setPlaying] = useState(gate);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -55,14 +55,13 @@ const MusicPlayer = ({ tracks ,gate}) => {
     <>
       <audio
         ref={audioRef}
-        src={tracks[currentTrack].src}
+        src={tracks[currentTrack]?.src}
         onTimeUpdate={handleTimeUpdate}
         onEnded={() => {
           setDuration(0);
-          setCurrentTime(0)
+          setCurrentTime(0);
           setShow(false);
         }}
-      
         onPlay={() => {
           setDuration(audioRef.current.duration);
           setCurrentTime(0);
@@ -113,7 +112,7 @@ const MusicPlayer = ({ tracks ,gate}) => {
                 </svg>
               </button>
 
-              <button onClick={playing ? handlePause : handlePlay} >
+              <button onClick={playing ? handlePause : handlePlay}>
                 {!playing ? (
                   <svg
                     stroke="currentColor"

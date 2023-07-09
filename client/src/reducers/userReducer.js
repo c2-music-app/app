@@ -15,6 +15,18 @@ const userReducer = (state = initialState, action) => {
         ...state,
         user: null,
       };
+
+    case "DEC_PLAY":
+      console.log(state.user, state.user.plays);
+      return {
+        ...state,
+        user: { ...state.user, plays: state.user.plays - 1 },
+      };
+    case "ADD_PLAYS":
+      return {
+        ...state,
+        user: { ...state.user, plays: state.user.plays + 20 },
+      };
     default:
       return state;
   }

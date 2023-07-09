@@ -1,8 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function ProfilePage() {
+  const user = useSelector((state) => state.user);
+  console.log(user);
   const [User, setUser] = useState({});
   const [isloading, setLoading] = useState(true);
 
@@ -13,7 +16,7 @@ export default function ProfilePage() {
       try {
         const response = await axios.get("http://localhost:5000/user", {
           headers: {
-            authorization: `Bearer ${token}`,
+            authorization: `Bearer ${user?.user?.token}`,
           },
         });
 

@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import Payment from "./pages/Payment";
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
         <Route path="category" element={<MusicCat />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
-        <Route path="/profilPage" element={<ProfilePage />} />
+        <Route path="/profilePage" element={<ProfilePage />} />
+        <Route path="/payment" element={<Payment />} />
       </Routes>
       <Footer />
     </div>

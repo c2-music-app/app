@@ -1,4 +1,7 @@
 import axios from "axios";
+import { useDispatch } from "react-redux";
+
+// const dispatch = useDispatch();
 
 export const getMusic = (url) => {
   // Thunk Function
@@ -40,3 +43,26 @@ export const getTrendingMusic = () => {
     }
   };
 };
+
+export const setFavoriteMusic = (music) => {
+  return {
+    type: "SET_FAVORITE_MUSIC",
+    payload: music,
+  };
+};
+export const getFavoriteMusic = () => {
+  return {
+    type: "GET_FAVORITE_MUSIC",
+  };
+};
+
+// export const decPlay = (state = ) => {
+//   console.log(state.user);
+//   // state = { ...state, user: { ...state.user, plays: state?.user.plays - 1 } };
+// };
+
+// export const addPlays = () => {
+//   dispatch({
+//     type: "ِADD_PLAYS",
+//   });
+// };
