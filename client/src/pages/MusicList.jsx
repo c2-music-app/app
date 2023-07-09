@@ -4,6 +4,7 @@ import {
   getMusic,
   getFavoriteMusic,
   getTrendingMusic,
+  setCurrentMusic,
 } from "../actions/musicActions";
 import MusicCard from "../components/MusicCard";
 import bg from "./bg.jpg";
@@ -14,6 +15,10 @@ const MusicList = () => {
   const musicsmallList = useSelector((state) => state.music?.music);
   const fMusic = useSelector((state) => state.music?.favoriteMusic);
   const [favoriteMusic, setFavoriteMusic] = useState([]);
+
+  const handleSetMusic = (music) => {
+    dispatch(setCurrentMusic(music));
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -85,14 +90,14 @@ const MusicList = () => {
                   >
                     <button
                       className="p-3 group focus:outline-none"
-                      onClick={() =>
+                      onClick={() => {
                         handleSetMusic({
-                          cover: `${song?.img}`,
+                          cover: `${song?.cover}`,
                           name: `${song?.name}`,
-                          src: `${song?.url}`,
+                          src: `${song?.src}`,
                           artist: `${song?.artist}`,
-                        })
-                      }
+                        });
+                      }}
                     >
                       <svg
                         className="w-4 h-4 group-hover:text-white"
