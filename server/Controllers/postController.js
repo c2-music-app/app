@@ -90,3 +90,44 @@ exports.deletePost = async (req, res, next) => {
     res.status(500).json({ success: false, error: "Server Error" });
   }
 };
+
+// @desc    Get not active posts
+// @route   GET /api/posts/request
+// @access  Public
+exports.notActivePosts = async (req, res, next) => {
+  try {
+    const notActivePosts = await Post.find({ active: false });
+    res.status(200).json({ success: true, data: notActivePosts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
+
+exports.acceptPostRequest = async (req, res, next) => {
+  try {
+    const postId = req.params.id;
+    const post = await Post.findByIdAndUpdate(postId, { active: true });
+    if (!post) {
+      return res.status(404).json({ success: false, error: "Post not found" });
+    }
+    res.status(200).json({ success: true, data: post });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
+
+exports.rejectPostRequest = async (req, res, next) => {
+  try {
+    const postId = req.params.id;
+    const post = await Post.findByIdAndUpdate(postId, { active: false });
+    if (!post) {
+      return res.status(404).json({ success: false, error: "Post not found" });
+    }
+    res.status(200).json({ success: true, data: post });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
