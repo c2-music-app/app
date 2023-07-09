@@ -450,7 +450,7 @@ function PostDetails() {
                   </div>
                   <div>
                     <div className="flex text-xl gap-2">
-                      <button
+                      {/* <button
                         className="text-purple-700"
                         onClick={() => {
                           setCurrentComment(comment._id);
@@ -462,7 +462,7 @@ function PostDetails() {
                       </button>
                       <button className="text-red-700">
                         <RiDeleteBin6Line />
-                      </button>
+                      </button> */}
                     </div>
                     <span className="italic font-thin">
                       {new Date(comment.createdAt).toLocaleString("default", {
