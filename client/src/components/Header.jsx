@@ -3,10 +3,13 @@ import { Link, NavLink } from "react-router-dom";
 import { navBar } from "../assets/data/data";
 import logo from "../assets/images/logo.png";
 import { AiOutlineMenu, AiOutlineSearch } from "react-icons/ai";
+import { Avatar, Button } from "@mantine/core";
+import { useSelector } from "react-redux";
 
 export const Header = () => {
   const activeNavLink = ({ isActive }) => (isActive ? "active" : "NavLink");
   const [isMenu, setIsMenu] = useState(false);
+  const user = useSelector((state) => state.user);
 
   return (
     <header className="fixed top-0 left-0 z-50 w-screen py-2 md:shadow-md shadow-sm bg-white">
@@ -34,9 +37,29 @@ export const Header = () => {
         </div>
 
         {/* profile  */}
-        <div className="profile flex items-center">
-          <div className="img w-10 h-10 rounded-full"></div>
-        </div>
+        {user.user != null || (
+          <div className="flex items-center gap-2">
+            <Link to={"/signUp"}>
+              <Button
+                className="bg-purple-700"
+                variant="gradient"
+                gradient={{ from: "teal", to: "blue", deg: 60 }}
+              >
+                Sign up
+              </Button>
+            </Link>
+            <Link to={"/signIn"}>
+              <Button variant="outline" color="violet">
+                Login
+              </Button>
+            </Link>
+          </div>
+        )}
+        {user.user != null && (
+          <Link to={"/profilePage"}>
+            <Avatar src={null} alt="no image here" color="indigo" radius="xl" />
+          </Link>
+        )}
       </div>
 
       {/* mobile */}

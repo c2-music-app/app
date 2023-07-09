@@ -34,7 +34,7 @@ export default function SignIn() {
 
     console.log(user);
     if (user.user) {
-      navigate("/");
+      navigate("/posts");
       // console.log(user.user.user);
     }
   };
@@ -82,7 +82,7 @@ export default function SignIn() {
         class="bg-gray-50 dark:bg-gray-900"
         style={{
           backgroundImage:
-            "url(https://t4.ftcdn.net/jpg/02/66/97/53/360_F_266975387_CVK7jWI9dSoL4owOzrw9wSElynS7bgRe.jpg)",
+            "url(https://images.unsplash.com/photo-1485579149621-3123dd979885?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1631&q=80)",
           backgroundSize: "cover",
         }}
       >
@@ -140,7 +140,7 @@ export default function SignIn() {
 
                 <button
                   type="submit"
-                  class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  class="w-full text-white bg-purple-700 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Sign in
                 </button>

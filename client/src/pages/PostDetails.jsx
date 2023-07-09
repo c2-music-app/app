@@ -5,12 +5,16 @@ import { FiArrowLeft, FiEdit } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegComment } from "react-icons/fa";
 
+import { useSelector } from "react-redux";
+
 import { Avatar, Button, Input, Modal, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import Filter from "bad-words";
 
 function PostDetails() {
+  const user = useSelector((state) => state.user);
+
   const [commentModal, { open, close }] = useDisclosure(false);
   const [formModal, { toggle }] = useDisclosure(false);
   const [commentForm, setCommentForm] = useState(false);
@@ -40,25 +44,26 @@ function PostDetails() {
   });
 
   const filter = new Filter();
+  filter.addWords("ugly");
+
+  async function getPostData() {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/posts/post/${title}`
+      );
+      console.log(response.data.data);
+      setPostData(response.data.data);
+      const authorDataResponse = await axios.get(
+        "http://localhost:5000/users/" + response.data.data.author
+      );
+      console.log(authorDataResponse.data.data);
+      setAuthorData(authorDataResponse.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
-    async function getPostData() {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/posts/post/${title}`
-        );
-        console.log(response.data.data);
-        setPostData(response.data.data);
-        const authorDataResponse = await axios.get(
-          "http://localhost:5000/users/" + response.data.data.author
-        );
-        console.log(authorDataResponse.data.data);
-        setAuthorData(authorDataResponse.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
     getPostData();
   }, []);
 
@@ -122,10 +127,14 @@ function PostDetails() {
       commentData.description = "";
       commentData.authorName = "";
       commentData.authorEmail = "";
+
+      getPostData();
     } else {
       return;
     }
   };
+
+  console.log(user.user, postData.author);
 
   return (
     <section className=" max-w-sm md:max-w-lg lg:max-w-3xl xl:max-w-5xl mx-auto flex flex-col mt-12">
@@ -182,7 +191,7 @@ function PostDetails() {
           <Button
             color="cyan"
             radius="md"
-            className="bg-sky-600"
+            className="bg-purple-600"
             onClick={handleUpdateComment}
           >
             Update
@@ -259,7 +268,7 @@ function PostDetails() {
               }
             />
           </Input.Wrapper>
-          <Button color="cyan" radius="md" className="bg-sky-600">
+          <Button color="cyan" radius="md" className="bg-purple-600">
             Update
           </Button>
         </form>
@@ -271,7 +280,9 @@ function PostDetails() {
       <div className="w-full bg-gray-200 h-14 flex items-center px-2 justify-between rounded-md">
         <div className="flex items-center gap-4">
           <Avatar src={authorData.avatar} radius={"xl"} />
-          <span className="font-bold text-sky-700">{authorData.username}</span>
+          <span className="font-bold text-purple-700">
+            {authorData.username}
+          </span>
           <span className="text-sm">
             {new Date(postData.createdAt).toLocaleString("default", {
               month: "long",
@@ -279,14 +290,18 @@ function PostDetails() {
             })}
           </span>
         </div>
-        <div className="flex text-xl gap-2">
-          <button className="text-sky-700" onClick={toggle}>
-            <FiEdit />
-          </button>
-          <button className="text-red-700" onClick={handlePostDelete}>
-            <RiDeleteBin6Line />
-          </button>
-        </div>
+        {user?.user?._id == postData?.author ? (
+          <div className="flex text-xl gap-2">
+            <button className="text-purple-700" onClick={toggle}>
+              <FiEdit />
+            </button>
+            <button className="text-red-700" onClick={handlePostDelete}>
+              <RiDeleteBin6Line />
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       <img
         className="w-full object-cover h-96 p-4"
@@ -314,7 +329,7 @@ function PostDetails() {
         <Button
           color="cyan"
           radius="md"
-          className="bg-sky-600"
+          className="bg-purple-600"
           onClick={handleToggleForm}
         >
           Comment
@@ -412,7 +427,7 @@ function PostDetails() {
           <Button
             color="cyan"
             radius="md"
-            className="bg-sky-600"
+            className="bg-purple-600"
             onClick={handleAddComment}
           >
             Submit
@@ -436,7 +451,7 @@ function PostDetails() {
                   <div>
                     <div className="flex text-xl gap-2">
                       <button
-                        className="text-sky-700"
+                        className="text-purple-700"
                         onClick={() => {
                           setCurrentComment(comment._id);
                           console.log(comment._id);
