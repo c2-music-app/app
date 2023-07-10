@@ -14,14 +14,14 @@ const {
 const router = express.Router();
 
 router.get("/", getPosts);
-router.get("/:id", getPost);
 router.get("/request", notActivePosts);
+router.put("/accept/:id", acceptPostRequest);
+router.get("/:id", getPost);
 router.get("/post/:title", getPostByName);
 router.post("/", createPost);
 router.put("/:id", updatePost);
 router.delete("/:id", deletePost);
 // Accept a post request by ID
-router.put("/accept/:id", acceptPostRequest);
 
 // Reject a post request by ID
 router.put("/reject/:id", rejectPostRequest);

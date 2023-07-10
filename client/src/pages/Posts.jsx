@@ -8,6 +8,7 @@ import {
   Group,
   Modal,
   Input,
+  Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +23,8 @@ function Home() {
     image: "",
   });
 
+  const [submitted, setSubmitted] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,8 +36,10 @@ function Home() {
 
   const handleSubmit = (event) => {
     console.log(user.user);
+    setSubmitted(true);
 
     if (formData.title && formData.description && formData.image) {
+      setSubmitted(false);
       dispatch(
         addPost(
           user.user._id,
@@ -49,6 +54,7 @@ function Home() {
       formData.image = "";
 
       close();
+      setSubmitted(false);
     } else {
       return;
     }
@@ -57,12 +63,19 @@ function Home() {
   return (
     <section className="flex flex-col gap-2 max-w-sm md:max-w-lg lg:max-w-3xl xl:max-w-5xl mx-auto py-12 mt-[8vh]">
       <Modal opened={opened} onClose={close} withCloseButton={true}>
+        <Title order={3} className="mb-4">
+          Add Post
+        </Title>
         <form className="flex flex-col gap-3 border border-gray-300 p-2 rounded-md mb-4">
           <Input.Wrapper
             id="title"
             withAsterisk
             label="Title"
-            error={formData.title ? false : "Title Cannot be empty"}
+            error={
+              formData.title || submitted == false
+                ? false
+                : "Title Cannot be empty"
+            }
           >
             <Input
               id="title"
@@ -84,7 +97,11 @@ function Home() {
             id="description"
             withAsterisk
             label="Description"
-            error={formData.description ? false : "Description Cannot be empty"}
+            error={
+              formData.description || submitted == false
+                ? false
+                : "Description Cannot be empty"
+            }
           >
             <Input
               id="description"
@@ -106,7 +123,11 @@ function Home() {
             id="image"
             withAsterisk
             label="Image URL"
-            error={formData.image ? false : "Image Cannot be empty"}
+            error={
+              formData.image || submitted == false
+                ? false
+                : "Image Cannot be empty"
+            }
           >
             <Input
               id="image"
@@ -130,7 +151,7 @@ function Home() {
             className="bg-purple-600"
             onClick={handleSubmit}
           >
-            Submit
+            Add Post
           </Button>
         </form>
       </Modal>

@@ -6,18 +6,18 @@ export const navBar = [
   },
   {
     id: 2,
-    name: "About",
-    path: "/about",
+    name: "Blog",
+    path: "/posts",
   },
   {
     id: 3,
-    name: "Contact us",
-    path: "/contact",
+    name: "Who we are",
+    path: "/about",
   },
   {
     id: 4,
-    name: "Blog",
-    path: "/posts",
+    name: "Get in Touch",
+    path: "/contact",
   },
 ];
 export const hero1 = [

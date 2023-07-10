@@ -7,14 +7,16 @@ import { FaRegComment } from "react-icons/fa";
 
 import { useSelector } from "react-redux";
 
-import { Avatar, Button, Input, Modal, Group } from "@mantine/core";
+import { Avatar, Button, Input, Modal, Group, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import Filter from "bad-words";
 
 function PostDetails() {
   const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
+  const [submitted, setSubmitted] = useState(false);
   const [commentModal, { open, close }] = useDisclosure(false);
   const [formModal, { toggle }] = useDisclosure(false);
   const [commentForm, setCommentForm] = useState(false);
@@ -72,15 +74,22 @@ function PostDetails() {
   };
 
   const handlePostDelete = async (_, id) => {
+    setSubmitted(true);
     try {
-      const response = await axios.delete("http://localhost:5000/posts/" + id);
+      const response = await axios.delete(
+        "http://localhost:5000/posts/" + postData._id
+      );
       console.log(response);
+
+      setSubmitted(false);
+      navigate("/posts");
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleUpdateComment = async (event, id) => {
+    setSubmitted(true);
     if (updateCommentData.title && updateCommentData.description) {
       try {
         const response = await axios.put(
@@ -96,15 +105,48 @@ function PostDetails() {
       updateCommentData.title = "";
       updateCommentData.description = "";
 
+      setSubmitted(false);
       close();
     } else {
       return;
     }
   };
 
-  const handleAddComment = async (event) => {
+  const handleUpdatePost = async () => {
+    setSubmitted(true);
     if (
-      commentData.title &&
+      updatePostData.title ||
+      updatePostData.description ||
+      updatePostData.image
+    ) {
+      try {
+        const response = await axios.put(
+          `http://localhost:5000/posts/${postData._id}`,
+          {
+            title: updatePostData.title,
+            description: updatePostData.description,
+            image: updatePostData.image,
+          }
+        );
+        console.log(response);
+      } catch (error) {}
+
+      updatePostData.title = "";
+      updatePostData.description = "";
+      updatePostData.image = "";
+
+      close();
+      setSubmitted(false);
+      navigate("/posts");
+    } else {
+      return;
+    }
+  };
+
+  const handleAddComment = async (event) => {
+    setSubmitted(true);
+    if (
+      // commentData.title &&
       commentData.description &&
       commentData.authorName &&
       commentData.authorEmail
@@ -112,22 +154,26 @@ function PostDetails() {
       try {
         const response = await axios.post(`http://localhost:5000/comments`, {
           postId: postData._id,
-          title: filter.clean(commentData.title),
+          title: "comment title",
           description: filter.clean(commentData.description),
           authorName: commentData.authorName,
           authorEmail: commentData.authorEmail,
         });
 
+        setSubmitted(false);
         console.log(response);
       } catch (error) {
         console.log(error);
       }
 
-      commentData.title = "";
+      // commentData.title = "";
       commentData.description = "";
       commentData.authorName = "";
       commentData.authorEmail = "";
 
+      setCommentForm((prevState) => !prevState);
+
+      setSubmitted(false);
       getPostData();
     } else {
       return;
@@ -139,18 +185,26 @@ function PostDetails() {
   return (
     <section className=" max-w-sm md:max-w-lg lg:max-w-3xl xl:max-w-5xl mx-auto flex flex-col mt-12">
       <Modal opened={commentModal} onClose={close} withCloseButton={true}>
+        <Title order={3} className="mb-4">
+          Update Comment
+        </Title>
         <form className="flex flex-col gap-3 border border-gray-300 p-2 rounded-md mb-4">
           <Input.Wrapper
             id="title"
             withAsterisk
             label="Title"
-            error={updateCommentData.title ? false : "Title Cannot be empty"}
+            error={
+              updateCommentData.title || submitted == false
+                ? false
+                : "Title Cannot be empty"
+            }
           >
             <Input
               id="title"
               placeholder="Title"
               value={updateCommentData.title}
-              onChange={(e) =>
+              onChange={(e) => {
+                console.log(submitted);
                 setUpdateCommentData((prevState) => {
                   console.log(e.target.value);
                   console.log(updateCommentData);
@@ -158,8 +212,8 @@ function PostDetails() {
                     ...prevState,
                     title: e.target.value,
                   };
-                })
-              }
+                });
+              }}
             />
           </Input.Wrapper>
           <Input.Wrapper
@@ -167,7 +221,7 @@ function PostDetails() {
             withAsterisk
             label="Description"
             error={
-              updateCommentData.description
+              updateCommentData.description || submitted == false
                 ? false
                 : "Description Cannot be empty"
             }
@@ -199,12 +253,19 @@ function PostDetails() {
         </form>
       </Modal>
       <Modal opened={formModal} onClose={toggle} withCloseButton={true}>
+        <Title order={3} className="mb-4">
+          Update Post
+        </Title>
         <form className="flex flex-col gap-3 border border-gray-300 p-2 rounded-md mb-4">
           <Input.Wrapper
             id="title"
             withAsterisk
             label="Title"
-            error={updatePostData.title ? false : "Title Cannot be empty"}
+            error={
+              updatePostData.title || submitted == false
+                ? false
+                : "Title Cannot be empty"
+            }
           >
             <Input
               id="title"
@@ -227,7 +288,9 @@ function PostDetails() {
             withAsterisk
             label="Description"
             error={
-              updatePostData.description ? false : "Description Cannot be empty"
+              updatePostData.description || submitted == false
+                ? false
+                : "Description Cannot be empty"
             }
           >
             <Input
@@ -250,7 +313,11 @@ function PostDetails() {
             id="image"
             withAsterisk
             label="Image"
-            error={updatePostData.image ? false : "Image Cannot be empty"}
+            error={
+              updatePostData.image || submitted == false
+                ? false
+                : "Image Cannot be empty"
+            }
           >
             <Input
               id="image"
@@ -268,7 +335,12 @@ function PostDetails() {
               }
             />
           </Input.Wrapper>
-          <Button color="cyan" radius="md" className="bg-purple-600">
+          <Button
+            color="cyan"
+            radius="md"
+            className="bg-purple-600"
+            onClick={handleUpdatePost}
+          >
             Update
           </Button>
         </form>
@@ -341,7 +413,11 @@ function PostDetails() {
             id="authorName"
             withAsterisk
             label="Name"
-            error={commentData.authorName ? false : "Name Cannot be empty"}
+            error={
+              commentData.authorName || submitted == false
+                ? false
+                : "Name Cannot be empty"
+            }
           >
             <Input
               id="authorName"
@@ -362,7 +438,11 @@ function PostDetails() {
             id="authorEmail"
             withAsterisk
             label="Email"
-            error={commentData.authorEmail ? false : "Email Cannot be empty"}
+            error={
+              commentData.authorEmail || submitted == false
+                ? false
+                : "Email Cannot be empty"
+            }
           >
             <Input
               id="authorEmail"
@@ -379,7 +459,7 @@ function PostDetails() {
               }
             />
           </Input.Wrapper>
-          <Input.Wrapper
+          {/* <Input.Wrapper
             id="title"
             withAsterisk
             label="Title"
@@ -399,13 +479,15 @@ function PostDetails() {
                 })
               }
             />
-          </Input.Wrapper>
+          </Input.Wrapper> */}
           <Input.Wrapper
             id="description"
             withAsterisk
             label="Description"
             error={
-              commentData.description ? false : "Description Cannot be empty"
+              commentData.description || submitted == false
+                ? false
+                : "Description Cannot be empty"
             }
           >
             <Input
@@ -430,7 +512,7 @@ function PostDetails() {
             className="bg-purple-600"
             onClick={handleAddComment}
           >
-            Submit
+            Add comment
           </Button>
         </form>
       )}
@@ -438,6 +520,7 @@ function PostDetails() {
       <div className="flex flex-col gap-3 ">
         {postData.comments &&
           postData.comments.map((comment) => {
+            console.log(comment);
             return (
               <div
                 key={Math.random()}
@@ -449,21 +532,28 @@ function PostDetails() {
                     <span className="font-semibold">{comment.authorName}</span>
                   </div>
                   <div>
-                    <div className="flex text-xl gap-2">
-                      {/* <button
-                        className="text-purple-700"
-                        onClick={() => {
-                          setCurrentComment(comment._id);
-                          console.log(comment._id);
-                          open();
-                        }}
-                      >
-                        <FiEdit />
-                      </button>
-                      <button className="text-red-700">
-                        <RiDeleteBin6Line />
-                      </button> */}
-                    </div>
+                    {user?.user?.email == comment.authorEmail && (
+                      <div className="flex text-xl gap-2">
+                        <button
+                          className="text-purple-700"
+                          onClick={() => {
+                            setCurrentComment(comment._id);
+                            console.log(comment._id);
+                            open();
+                          }}
+                        >
+                          <FiEdit />
+                        </button>
+                        <button
+                          className="text-red-700"
+                          onClick={() => {
+                            // handleDeleteComment()
+                          }}
+                        >
+                          <RiDeleteBin6Line />
+                        </button>
+                      </div>
+                    )}
                     <span className="italic font-thin">
                       {new Date(comment.createdAt).toLocaleString("default", {
                         month: "long",
